@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Complete Payment</title>
+</head>
+<body style="font-family: Arial; max-width:700px; margin:40px auto;">
+  <h1>Complete your payment</h1>
+  <p>This page will send you securely to Chain2Pay.</p>
+
+  <button id="payBtn">Continue to Payment</button>
+
+  <script>
+    document.getElementById("payBtn").onclick = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const orderId = params.get("order_id");
+
+      const res = await fetch("/api/create-payment", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ order_id: orderId })
+      });
+
+      const data = await res.json();
+
+      window.location.href = data.payment_url;
+    };
+  </script>
+</body>
+</html>
